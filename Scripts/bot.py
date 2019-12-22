@@ -6,28 +6,22 @@ from telegram.ext import Filters
 
 TG_TOKEN = "812570802:AAFBDPRhA1zlZdQpcc-SJ6AjDqifRCBFoXk"
 
-def message_handler(bot: Bot, update: Update):
+def message_handler(update, context):
     user = update.effective_user
     if user:
         name = user.first_name
     else:
         name = "incognito"
 
-    text = update.edited_message.text
-    reply_text = f'Hi, {name}!\n\n{text}'
-    bot.send_message(
-        chat_id=update.effective_message.chat_id,
-        text=reply_text
-    )
+    update.message.reply_text(
+        'Hello {}'.format(update.message.from_user.first_name))
 
 
 def main():
-    bot = Bot(
-        token=TG_TOKEN,
-    )
-    updater = Updater(
-        bot=bot,
-    )
+    print("Run Bot")
+
+    updater = Updater(TG_TOKEN, use_context=True)
+
     handler = MessageHandler(Filters.all, message_handler)
     updater.dispatcher.add_handler(handler)
 
